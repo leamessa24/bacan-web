@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nosotros – Bacán Petshop | Rosario</title>
+  <meta name="description" content="Conocé la historia de Bacán. Somos Lea y Agos, y esto es lo que somos.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+  <style>
+    .nos-hero {
+      background: var(--verde);
+      padding: 10rem 0 6rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .nos-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: radial-gradient(circle, rgba(242,234,216,0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .nos-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900;
+      color: var(--beige);
+      letter-spacing: -3px;
+      line-height: 1.05;
+      position: relative;
+    }
+    .nos-hero p {
+      color: rgba(242,234,216,0.7);
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      font-weight: 300;
+      position: relative;
+    }
+
+    .historia { background: var(--crema); padding: 6rem 0; }
+
+    .historia-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .historia-texto p {
+      font-size: 1.05rem;
+      color: var(--texto-suave);
+      line-height: 1.85;
+      margin-bottom: 1.25rem;
+      font-weight: 300;
+    }
+
+    .historia-texto p strong { color: var(--verde); font-weight: 600; }
+
+    .historia-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .timeline-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 39px;
+      top: 50px;
+      bottom: -20px;
+      width: 2px;
+      background: var(--beige-oscuro);
+    }
+
+    .timeline-año {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--verde);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--beige);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-contenido {
+      padding: 1.5rem 0;
+    }
+
+    .timeline-titulo {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--verde);
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.88rem;
+      color: var(--texto-suave);
+      line-height: 1.6;
+    }
+
+    .equipo { background: var(--beige); padding: 6rem 0; }
+
+    .equipo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+      max-width: 700px;
+    }
+
+    .persona-card {
+      background: var(--blanco);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: var(--transicion);
+      border: 1px solid rgba(26,51,38,0.06);
+    }
+
+    .persona-card:hover { transform: translateY(-4px); box-shadow: var(--sombra-hover); }
+
+    .persona-foto {
+      height: 200px;
+      background: var(--verde);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .persona-foto-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(242,234,216,0.08) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+
+    .persona-info { padding: 1.5rem; }
+
+    .persona-nombre {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--verde);
+      margin-bottom: 0.25rem;
+    }
+
+    .persona-rol {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--verde-claro);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .persona-bio {
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+      line-height: 1.6;
+    }
+
+    .mision { background: var(--verde); padding: 6rem 0; text-align: center; }
+
+    .mision-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .mision-item {
+      padding: 2rem;
+      border: 1px solid rgba(242,234,216,0.12);
+      border-radius: 16px;
+      transition: var(--transicion);
+    }
+
+    .mision-item:hover {
+      background: rgba(242,234,216,0.05);
+      border-color: rgba(242,234,216,0.25);
+    }
+
+    .mision-icono { font-size: 2.5rem; margin-bottom: 1rem; }
+
+    .mision-titulo {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--beige);
+      margin-bottom: 0.5rem;
+    }
+
+    .mision-desc {
+      font-size: 0.88rem;
+      color: rgba(242,234,216,0.65);
+      line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+      .historia-grid, .equipo-grid, .mision-grid { grid-template-columns: 1fr; }
+      .equipo-grid { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">Bacán<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="tienda.html">Tienda</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="nosotros.html" class="active">Nosotros</a></li>
+      <li><a href="https://wa.me/5493413000000" target="_blank" class="nav-cta">💬 WhatsApp</a></li>
+    </ul>
+    <button class="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <div class="nos-hero">
+    <div class="container" style="position:relative">
+      <h1>Somos Bacán.<br><em>Y esto es lo que somos.</em></h1>
+      <p>Una historia de amor a las mascotas, construida desde Rosario.</p>
+    </div>
+    <div class="wave-divider">
+      <svg viewBox="0 0 1440 50" preserveAspectRatio="none">
+        <path d="M0,50 C360,0 1080,50 1440,20 L1440,50 Z" fill="#faf7f0"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- HISTORIA -->
+  <section class="historia">
+    <div class="container">
+      <div class="historia-grid">
+        <div class="historia-texto reveal">
+          <span class="section-label">Nuestra historia</span>
+          <h2 class="section-titulo">De casa a <em>local</em>, de local a familia</h2>
+          <p>Todo empezó con nuestras propias mascotas y la frustración de no encontrar productos realmente buenos a precios accesibles. <strong>Así nació Bacán.</strong></p>
+          <p>Arrancamos desde casa, vendiendo por Instagram y WhatsApp. Poco a poco, la gente confió en nosotros — no por la publicidad, sino porque realmente los ayudábamos a elegir bien.</p>
+          <p>Hoy tenemos nuestro local físico en Rosario y seguimos creciendo. Pero la esencia sigue siendo la misma: <strong>asesoramiento real, productos seleccionados con criterio y mucho amor por los animales.</strong></p>
+          <p>Somos Lea y Agos, y Bacán es nuestra forma de hacer lo que amamos todos los días.</p>
+        </div>
+        <div class="historia-timeline reveal">
+          <div class="timeline-item">
+            <div class="timeline-año">2022</div>
+            <div class="timeline-contenido">
+              <div class="timeline-titulo">Los comienzos 🏠</div>
+              <div class="timeline-desc">Bacán nace desde casa, con Instagram y WhatsApp como principales canales de venta. Los primeros clientes llegan por recomendación.</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-año">2023</div>
+            <div class="timeline-contenido">
+              <div class="timeline-titulo">Crecimiento 📦</div>
+              <div class="timeline-desc">Incorporamos nuevas líneas de productos, incluyendo limpieza y accesorios. La comunidad de clientes sigue creciendo orgánicamente.</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-año">2024</div>
+            <div class="timeline-contenido">
+              <div class="timeline-titulo">El local 🏪</div>
+              <div class="timeline-desc">Abrimos nuestro primer local físico en Rosario. Un espacio pensado para las mascotas y sus familias.</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-año">2025</div>
+            <div class="timeline-contenido">
+              <div class="timeline-titulo">Seguimos creciendo 🚀</div>
+              <div class="timeline-desc">Nueva web, nuevas líneas y más de 500 familias que confían en Bacán. El camino recién empieza.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPO -->
+  <section class="equipo">
+    <div class="container">
+      <span class="section-label">El equipo</span>
+      <h2 class="section-titulo">Las personas <em>detrás de Bacán</em></h2>
+      <div class="equipo-grid reveal">
+        <div class="persona-card">
+          <div class="persona-foto">
+            <div class="persona-foto-pattern"></div>
+            👨
+          </div>
+          <div class="persona-info">
+            <div class="persona-nombre">Leandro</div>
+            <div class="persona-rol">Co-fundador · Operaciones & Marketing</div>
+            <div class="persona-bio">Fanático de la tecnología y los animales. Se encarga de que todo funcione —desde los pedidos hasta la presencia digital de Bacán.</div>
+          </div>
+        </div>
+        <div class="persona-card">
+          <div class="persona-foto" style="background:var(--verde-medio)">
+            <div class="persona-foto-pattern"></div>
+            👩
+          </div>
+          <div class="persona-info">
+            <div class="persona-nombre">Agostina</div>
+            <div class="persona-rol">Co-fundadora · Atención & Productos</div>
+            <div class="persona-bio">El corazón de Bacán. Ella selecciona cada producto y se asegura de que cada cliente se vaya con exactamente lo que su mascota necesita.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISIÓN -->
+  <section class="mision">
+    <div class="container">
+      <span class="section-label" style="color:rgba(242,234,216,0.5);display:block;text-align:center">Lo que nos mueve</span>
+      <h2 class="section-titulo" style="color:var(--beige);text-align:center">Nuestra <em>misión</em></h2>
+      <div class="mision-grid reveal">
+        <div class="mision-item">
+          <div class="mision-icono">🌿</div>
+          <div class="mision-titulo">Productos con criterio</div>
+          <div class="mision-desc">No vendemos cualquier cosa. Cada producto que ofrecemos pasa por nuestra propia evaluación antes de llegar a tu mascota.</div>
+        </div>
+        <div class="mision-item">
+          <div class="mision-icono">💚</div>
+          <div class="mision-titulo">Acompañamiento real</div>
+          <div class="mision-desc">Somos personas, no un algoritmo. Te ayudamos a tomar la mejor decisión para el bienestar de tu compañero de vida.</div>
+        </div>
+        <div class="mision-item">
+          <div class="mision-icono">🐾</div>
+          <div class="mision-titulo">Amor por los animales</div>
+          <div class="mision-desc">Esto no es solo un negocio. Es nuestra forma de vivir y contribuir al bienestar de todos los peludos de Rosario.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="contacto" style="padding:5rem 0">
+    <div class="container contacto-inner">
+      <h2 class="section-titulo" style="color:var(--beige);margin-bottom:0.75rem">¿Querés conocernos mejor?</h2>
+      <p class="section-subtitulo" style="margin:0 auto 2rem">Escribinos sin compromiso. Somos buena gente.</p>
+      <div class="contacto-botones">
+        <a href="https://wa.me/5493413000000" target="_blank" class="btn-wpp-grande">💬 Escribirnos por WhatsApp</a>
+        <a href="https://instagram.com/bacan.petshop" target="_blank" class="btn btn-secundario">📸 Seguirnos en Instagram</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">Bacán<span>.</span></div>
+          <p class="footer-desc">Malcriadores de mascotas desde Rosario.</p>
+        </div>
+        <div>
+          <div class="footer-titulo">Tienda</div>
+          <ul class="footer-links">
+            <li><a href="tienda.html">Ver productos</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-titulo">Info</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="blog.html">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-titulo">Contacto</div>
+          <ul class="footer-links">
+            <li><a href="https://instagram.com/bacan.petshop" target="_blank">@bacan.petshop</a></li>
+            <li><a href="https://wa.me/5493413000000" target="_blank">WhatsApp</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 Bacán – Malcriadores de Mascotas</span>
+        <span>Hecho con ❤️ en Rosario</span>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/5493413000000" target="_blank" class="wpp-float">💬</a>
+  <script src="js/main.js"></script>
+</body>
+</html>
