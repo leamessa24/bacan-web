@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bacán – Malcriadores de Mascotas | Rosario</title>
+  <meta name="description" content="Productos premium para perros y gatos en Rosario. Alimentos, snacks, higiene y más.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+</head>
+<body>
+
+<!-- ============ POPUP ============ -->
+<div class="popup-overlay hidden" id="popup">
+  <div class="popup-box">
+    <button class="popup-cerrar" id="popup-cerrar">✕</button>
+    <div class="popup-imagen">
+      <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=600&q=80&auto=format&fit=crop" alt="Mascotas felices" loading="lazy">
+      <div class="popup-imagen-overlay">
+        <div class="popup-imagen-badge">🐾 Bienvenido</div>
+      </div>
+    </div>
+    <div class="popup-contenido">
+      <div class="popup-titulo">¡Registrate y <em>desbloqueá</em> los precios!</div>
+      <p class="popup-desc">Creá tu cuenta gratis en segundos y accedé a todos los precios, ofertas exclusivas y novedades de Bacán antes que nadie.</p>
+      <div class="popup-botones">
+        <button class="btn btn-verde btn-lg" data-open="registro" onclick="cerrarPopup(); setTimeout(()=>abrirModal('registro'),200)">Crear cuenta gratis</button>
+        <button class="btn btn-outline-verde" data-open="login" onclick="cerrarPopup(); setTimeout(()=>abrirModal('login'),200)">Ya tengo cuenta</button>
+        <div class="popup-skip" id="popup-skip">Seguir sin registrarme →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL LOGIN ============ -->
+<div class="modal-overlay hidden" id="modal-login">
+  <div class="modal-box">
+    <button class="modal-cerrar">✕</button>
+    <div class="modal-titulo">Bienvenido de <em>vuelta</em> 🐾</div>
+    <div class="modal-subtitulo">Ingresá para ver precios y novedades exclusivas.</div>
+    <form id="form-login">
+      <div class="form-grupo">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="login-email" placeholder="vos@email.com" required>
+      </div>
+      <div class="form-grupo">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" id="login-pass" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-verde" style="width:100%;margin-top:0.5rem">Ingresar</button>
+    </form>
+    <div class="modal-toggle">¿No tenés cuenta? <a id="ir-registro">Registrate gratis</a></div>
+  </div>
+</div>
+
+<!-- ============ MODAL REGISTRO ============ -->
+<div class="modal-overlay hidden" id="modal-registro">
+  <div class="modal-box">
+    <button class="modal-cerrar">✕</button>
+    <div class="modal-titulo">Creá tu cuenta <em>gratis</em> 🐾</div>
+    <div class="modal-subtitulo">Accedé a precios, ofertas y novedades al instante.</div>
+    <form id="form-registro">
+      <div class="form-grupo">
+        <label class="form-label">Nombre</label>
+        <input class="form-input" type="text" id="reg-nombre" placeholder="Tu nombre" required>
+      </div>
+      <div class="form-grupo">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="reg-email" placeholder="vos@email.com" required>
+      </div>
+      <div class="form-grupo">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" id="reg-pass" placeholder="Mínimo 6 caracteres" minlength="6" required>
+      </div>
+      <button type="submit" class="btn btn-verde" style="width:100%;margin-top:0.5rem">Crear cuenta gratis</button>
+    </form>
+    <div class="modal-toggle">¿Ya tenés cuenta? <a id="ir-login">Ingresá acá</a></div>
+  </div>
+</div>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">Bacán<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Inicio</a></li>
+    <li><a href="tienda.html">Tienda</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="nosotros.html">Nosotros</a></li>
+  </ul>
+  <div class="nav-auth">
+    <div id="nav-login">
+      <button class="btn btn-outline-verde btn-sm" data-open="login">Ingresar</button>
+      <button class="btn btn-verde btn-sm" data-open="registro">Registrarse</button>
+    </div>
+    <div id="nav-user">
+      <div class="nav-avatar">👤</div>
+      <span id="nav-username"></span>
+      <button id="btn-signout" class="btn btn-sm" style="background:var(--beige);color:var(--texto)">Salir</button>
+    </div>
+  </div>
+  <button class="hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">🌿 Rosario, Santa Fe — Desde 2022</div>
+    <h1 class="hero-titulo">Para los que <em>malcrían</em><br>con todo el amor</h1>
+    <p class="hero-subtitulo">Alimentos, snacks, higiene y todo lo que tu perro o gato necesita — elegido con el mismo cuidado con el que ellos te eligen a vos.</p>
+    <div class="hero-botones">
+      <a href="tienda.html" class="btn btn-beige btn-lg">Ver productos →</a>
+      <a href="https://wa.me/5493413000000" target="_blank" class="btn btn-wpp btn-lg">💬 WhatsApp</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">+500</div>
+        <div class="stat-label">Clientes felices</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">+80</div>
+        <div class="stat-label">Productos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3 años</div>
+        <div class="stat-label">Con vos</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-foto">
+      <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80&auto=format&fit=crop" alt="Perro feliz" loading="eager">
+      <div class="hero-foto-overlay"></div>
+      <div class="hero-foto-tag">🐕 Para perros</div>
+    </div>
+    <div class="hero-foto">
+      <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800&q=80&auto=format&fit=crop" alt="Gato lindo" loading="eager">
+      <div class="hero-foto-overlay"></div>
+      <div class="hero-foto-tag">🐱 Para gatos</div>
+    </div>
+  </div>
+
+  <div class="hero-divisor">
+    <svg viewBox="0 0 1440 55" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,55 C400,0 1040,55 1440,25 L1440,55 Z" fill="#faf5e9"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ============ VALORES ============ -->
+<section class="valores">
+  <div class="container">
+    <span class="section-label" style="color:rgba(255,255,255,0.5)">Por qué elegirnos</span>
+    <h2 class="section-titulo">Más que un petshop,<br><em>una familia</em></h2>
+    <div class="valores-grid reveal">
+      <div class="valor-card">
+        <span class="valor-icono">🌿</span>
+        <div class="valor-titulo">Productos seleccionados</div>
+        <div class="valor-desc">Elegimos cada producto como si fuera para nuestras propias mascotas. Nada genérico, todo probado y aprobado.</div>
+      </div>
+      <div class="valor-card">
+        <span class="valor-icono">💚</span>
+        <div class="valor-titulo">Asesoramiento real</div>
+        <div class="valor-desc">No somos un supermercado. Te acompañamos a encontrar exactamente lo que tu mascota necesita.</div>
+      </div>
+      <div class="valor-card">
+        <span class="valor-icono">🚀</span>
+        <div class="valor-titulo">Envío a domicilio</div>
+        <div class="valor-desc">Llegamos a toda Rosario. Rápido, cuidadoso y con el mimo que se merecen tus peludos.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRODUCTOS ============ -->
+<section class="productos">
+  <div class="container">
+    <div class="productos-header">
+      <div>
+        <span class="section-label">Lo más pedido</span>
+        <h2 class="section-titulo">Productos <em>destacados</em></h2>
+        <div class="tabs-row">
+          <button class="tab active" data-cat="todos">Todos</button>
+          <button class="tab" data-cat="alimento">Alimento</button>
+          <button class="tab" data-cat="snacks">Snacks</button>
+          <button class="tab" data-cat="higiene">Higiene</button>
+        </div>
+      </div>
+      <a href="tienda.html" class="btn btn-outline-verde">Ver todo →</a>
+    </div>
+
+    <div class="productos-grid reveal">
+
+      <div class="producto-card" data-cat="alimento">
+        <div class="producto-imagen">
+          🦴
+          <span class="producto-badge">Más vendido</span>
+        </div>
+        <div class="producto-info">
+          <div class="producto-categoria">Alimento · Perros</div>
+          <div class="producto-nombre">Royal Canin Adult</div>
+          <div class="producto-desc">Nutrición completa y balanceada para adultos de todas las razas.</div>
+          <div class="producto-footer">
+            <span class="precio-protegido">$8.500</span>
+            <button class="precio-lock">🔒 Ver precio</button>
+            <a href="https://wa.me/5493413000000?text=Hola!%20Quiero%20el%20Royal%20Canin%20Adult" target="_blank" class="btn btn-wpp btn-sm">💬 Pedir</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card" data-cat="alimento">
+        <div class="producto-imagen">🐱</div>
+        <div class="producto-info">
+          <div class="producto-categoria">Alimento · Gatos</div>
+          <div class="producto-nombre">Whiskas Adulto 3kg</div>
+          <div class="producto-desc">Mezcla perfecta de sabores para los gatos más exigentes.</div>
+          <div class="producto-footer">
+            <span class="precio-protegido">$4.200</span>
+            <button class="precio-lock">🔒 Ver precio</button>
+            <a href="https://wa.me/5493413000000?text=Hola!%20Quiero%20el%20Whiskas%20Adulto" target="_blank" class="btn btn-wpp btn-sm">💬 Pedir</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card" data-cat="snacks">
+        <div class="producto-imagen">
+          🍖
+          <span class="producto-badge nuevo">Nuevo</span>
+        </div>
+        <div class="producto-info">
+          <div class="producto-categoria">Snacks · Perros</div>
+          <div class="producto-nombre">Bifinho Natural 500g</div>
+          <div class="producto-desc">Bocaditos saludables sin colorantes. El mejor premio.</div>
+          <div class="producto-footer">
+            <span class="precio-protegido">$1.800</span>
+            <button class="precio-lock">🔒 Ver precio</button>
+            <a href="https://wa.me/5493413000000?text=Hola!%20Quiero%20el%20Bifinho" target="_blank" class="btn btn-wpp btn-sm">💬 Pedir</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="producto-card" data-cat="higiene">
+        <div class="producto-imagen">🛁</div>
+        <div class="producto-info">
+          <div class="producto-categoria">Higiene · Todos</div>
+          <div class="producto-nombre">Shampoo Neutro Premium</div>
+          <div class="producto-desc">pH balanceado, suave para pieles sensibles. Pelo brilloso.</div>
+          <div class="producto-footer">
+            <span class="precio-protegido">$2.900</span>
+            <button class="precio-lock">🔒 Ver precio</button>
+            <a href="https://wa.me/5493413000000?text=Hola!%20Quiero%20el%20Shampoo" target="_blank" class="btn btn-wpp btn-sm">💬 Pedir</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ BLOG ============ -->
+<section class="blog">
+  <div class="container">
+    <span class="section-label">Tips & consejos</span>
+    <h2 class="section-titulo">El blog de <em>Bacán</em></h2>
+    <p class="section-subtitulo">Para que tus peludos vivan su mejor vida.</p>
+    <div class="blog-grid reveal">
+      <a href="blog.html" class="blog-card blog-card--grande">
+        <div class="blog-imagen">
+          <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=700&q=80&auto=format&fit=crop" alt="Perros corriendo" loading="lazy">
+        </div>
+        <div class="blog-contenido">
+          <div class="blog-meta">
+            <span class="blog-etiqueta">Nutrición</span>
+            <span class="blog-fecha">15 Mar 2025</span>
+          </div>
+          <div class="blog-titulo">Cómo elegir el mejor alimento para tu perro según su etapa de vida</div>
+          <div class="blog-extracto">Cachorro, adulto o senior — cada etapa tiene sus propias necesidades. Te explicamos cómo leer las etiquetas y qué buscar.</div>
+        </div>
+      </a>
+
+      <a href="blog.html" class="blog-card">
+        <div class="blog-imagen">
+          <img src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=400&q=80&auto=format&fit=crop" alt="Gato" loading="lazy">
+        </div>
+        <div class="blog-contenido">
+          <div class="blog-meta">
+            <span class="blog-etiqueta">Gatos</span>
+            <span class="blog-fecha">8 Mar 2025</span>
+          </div>
+          <div class="blog-titulo">5 señales de que tu gato está feliz</div>
+        </div>
+      </a>
+
+      <a href="blog.html" class="blog-card">
+        <div class="blog-imagen">
+          <div class="blog-emoji-fallback" style="background:var(--marron)">🛁</div>
+        </div>
+        <div class="blog-contenido">
+          <div class="blog-meta">
+            <span class="blog-etiqueta">Higiene</span>
+            <span class="blog-fecha">1 Mar 2025</span>
+          </div>
+          <div class="blog-titulo">¿Con qué frecuencia bañar a tu mascota?</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIOS ============ -->
+<section class="testimonios">
+  <div class="container">
+    <span class="section-label">Lo que dicen</span>
+    <h2 class="section-titulo">Familias que <em>confían</em> en Bacán</h2>
+    <div class="testimonios-grid reveal">
+      <div class="testimonio-card">
+        <div class="estrellas">★★★★★</div>
+        <span class="testimonio-comillas">"</span>
+        <p class="testimonio-texto">Llevo más de un año comprando acá. La calidad de los productos es excelente y siempre me ayudan a elegir lo mejor para Milo.</p>
+        <div class="testimonio-autor">
+          <div class="autor-avatar">👩</div>
+          <div>
+            <div class="autor-nombre">Valentina R.</div>
+            <div class="autor-mascota">🐕 Mamá de Milo, Golden</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonio-card">
+        <div class="estrellas">★★★★★</div>
+        <span class="testimonio-comillas">"</span>
+        <p class="testimonio-texto">El envío llegó rapidísimo y todo perfectamente embalado. Mi gata Luna está feliz con el alimento nuevo. Recomiendo 100%.</p>
+        <div class="testimonio-autor">
+          <div class="autor-avatar">👨</div>
+          <div>
+            <div class="autor-nombre">Matías G.</div>
+            <div class="autor-mascota">🐱 Papá de Luna, Angora</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonio-card">
+        <div class="estrellas">★★★★★</div>
+        <span class="testimonio-comillas">"</span>
+        <p class="testimonio-texto">Me asesoraron genial para la dieta de mi perra con alergia. Encontramos el alimento perfecto y nunca más tuve problemas.</p>
+        <div class="testimonio-autor">
+          <div class="autor-avatar">👩</div>
+          <div>
+            <div class="autor-nombre">Sofía M.</div>
+            <div class="autor-mascota">🐕 Mamá de Coco, Beagle</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NOSOTROS ============ -->
+<section class="nosotros">
+  <div class="container">
+    <div class="nosotros-inner">
+      <div class="nosotros-visual reveal">
+        <div class="nosotros-foto">
+          <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=700&q=80&auto=format&fit=crop" alt="Mascota feliz" loading="lazy">
+          <div class="nosotros-foto-overlay"></div>
+        </div>
+        <div class="nosotros-tag">
+          <div class="nosotros-tag-num">❤️</div>
+          <div class="nosotros-tag-text">Con amor, siempre</div>
+        </div>
+      </div>
+      <div class="nosotros-texto reveal">
+        <span class="section-label">Nuestra historia</span>
+        <h2 class="section-titulo">Somos Lea y Agos,<br>y esto es <em>Bacán</em></h2>
+        <p>Bacán nació del amor por nuestras propias mascotas. Arrancamos desde casa con mucha pasión y ganas de ofrecer algo diferente.</p>
+        <p>Hoy tenemos nuestro local en Rosario y seguimos creciendo — siempre con la misma esencia de familia.</p>
+        <ul class="nosotros-checklist">
+          <li><span class="check-icon">✓</span> Asesoramiento personalizado en cada compra</li>
+          <li><span class="check-icon">✓</span> Productos cuidadosamente seleccionados</li>
+          <li><span class="check-icon">✓</span> Atención por WhatsApp todos los días</li>
+          <li><span class="check-icon">✓</span> Envío a domicilio en Rosario</li>
+        </ul>
+        <a href="nosotros.html" class="btn btn-verde">Conocernos mejor →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="contacto">
+  <div class="container contacto-inner">
+    <span class="section-label" style="color:rgba(78,200,130,0.6);display:block;text-align:center;justify-content:center">¿Hablamos?</span>
+    <h2 class="section-titulo" style="margin-bottom:1rem">Tu mascota se merece<br><em>lo mejor hoy</em></h2>
+    <p class="section-subtitulo">Sin vueltas, sin formularios. Un mensaje y listo.</p>
+    <div class="contacto-botones">
+      <a href="https://wa.me/5493413000000?text=Hola%20Bac%C3%A1n!" target="_blank" class="btn btn-wpp btn-lg">💬 Escribirnos ahora</a>
+      <a href="tienda.html" class="btn btn-blanco btn-lg">Ver catálogo →</a>
+    </div>
+    <div class="redes-links">
+      <a href="https://instagram.com/bacan.petshop" target="_blank" class="red-link" title="Instagram">📸</a>
+      <a href="https://wa.me/5493413000000" target="_blank" class="red-link" title="WhatsApp">💬</a>
+      <a href="https://tiktok.com/@bacan.petshop" target="_blank" class="red-link" title="TikTok">🎵</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Bacán<span>.</span></div>
+        <p class="footer-desc">Malcriadores de mascotas desde Rosario. Porque cada peludo merece lo mejor.</p>
+      </div>
+      <div>
+        <div class="footer-titulo">Tienda</div>
+        <ul class="footer-links">
+          <li><a href="tienda.html">Alimentos</a></li>
+          <li><a href="tienda.html">Snacks</a></li>
+          <li><a href="tienda.html">Higiene</a></li>
+          <li><a href="tienda.html">Accesorios</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-titulo">Info</div>
+        <ul class="footer-links">
+          <li><a href="nosotros.html">Nosotros</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-titulo">Contacto</div>
+        <ul class="footer-links">
+          <li><a href="https://instagram.com/bacan.petshop" target="_blank">@bacan.petshop</a></li>
+          <li><a href="https://wa.me/5493413000000" target="_blank">WhatsApp</a></li>
+          <li><a>Rosario, Santa Fe</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Bacán – Malcriadores de Mascotas</span>
+      <span>Hecho con ❤️ en Rosario</span>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/5493413000000" target="_blank" class="wpp-float" title="WhatsApp">💬</a>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/main.js"></script>
+<script>
+  // Init auth state
+  initNavAuth();
+  initPriceVisibility();
+</script>
+</body>
+</html>

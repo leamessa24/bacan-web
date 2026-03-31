@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Bacán Petshop</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+  <style>
+    body { background: #f0f4f1; }
+
+    .admin-wrapper {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .admin-sidebar {
+      background: var(--negro);
+      color: var(--blanco);
+      padding: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 260px;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+
+    .admin-logo {
+      padding: 2rem 1.75rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .admin-logo-text {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--blanco);
+    }
+    .admin-logo-text span { color: var(--verde-claro); }
+
+    .admin-logo-sub {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.2rem;
+    }
+
+    .admin-nav { padding: 1.5rem 1rem; flex: 1; }
+
+    .admin-nav-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.3);
+      padding: 0 0.75rem;
+      margin-bottom: 0.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.75rem;
+      border-radius: 10px;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transicion);
+      margin-bottom: 0.15rem;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: var(--font-body);
+    }
+
+    .admin-nav-item:hover {
+      background: rgba(255,255,255,0.06);
+      color: var(--blanco);
+    }
+
+    .admin-nav-item.active {
+      background: var(--verde);
+      color: var(--blanco);
+    }
+
+    .admin-nav-item .nav-icon { font-size: 1.1rem; width: 22px; }
+
+    .admin-sidebar-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* MAIN */
+    .admin-main {
+      margin-left: 260px;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .admin-titulo {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: var(--verde-oscuro);
+      letter-spacing: -1px;
+    }
+
+    .admin-subtitulo {
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+      margin-top: 0.2rem;
+    }
+
+    /* STATS CARDS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      padding: 1.5rem;
+      border: 1px solid rgba(45,158,95,0.08);
+      transition: var(--transicion);
+    }
+
+    .stat-card:hover { box-shadow: var(--sombra-sm); }
+
+    .stat-card-icono {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .stat-card-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--verde-oscuro);
+      line-height: 1;
+    }
+
+    .stat-card-label {
+      font-size: 0.8rem;
+      color: var(--texto-suave);
+      margin-top: 0.3rem;
+    }
+
+    .stat-card-trend {
+      font-size: 0.75rem;
+      color: var(--verde);
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    /* SECTIONS */
+    .admin-section {
+      background: var(--blanco);
+      border-radius: var(--radio);
+      border: 1px solid rgba(45,158,95,0.08);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .admin-section-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(45,158,95,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .admin-section-titulo {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--texto);
+    }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--texto-suave);
+      font-weight: 700;
+      background: #f8faf9;
+      border-bottom: 1px solid rgba(45,158,95,0.06);
+    }
+
+    td {
+      padding: 0.85rem 1.5rem;
+      border-bottom: 1px solid rgba(45,158,95,0.05);
+      color: var(--texto);
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafcfb; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radio-full);
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .badge-verde { background: var(--verde-suave); color: var(--verde-oscuro); }
+    .badge-amarillo { background: #fef9c3; color: #854d0e; }
+    .badge-rojo { background: #fee2e2; color: #991b1b; }
+    .badge-gris { background: #f3f4f6; color: #374151; }
+
+    /* PRODUCTOS EDITOR */
+    .productos-editor {
+      padding: 1.5rem;
+    }
+
+    .producto-row {
+      display: grid;
+      grid-template-columns: 50px 1fr 120px 120px 80px 100px;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid rgba(45,158,95,0.06);
+    }
+
+    .producto-row:last-child { border-bottom: none; }
+
+    .producto-emoji { font-size: 2rem; text-align: center; }
+
+    .producto-nombre-edit { font-weight: 600; font-size: 0.88rem; }
+    .producto-cat-edit { font-size: 0.75rem; color: var(--texto-suave); margin-top: 0.1rem; }
+
+    .input-precio {
+      padding: 0.4rem 0.6rem;
+      border: 2px solid var(--beige-oscuro);
+      border-radius: var(--radio-sm);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      width: 100%;
+      color: var(--texto);
+      background: var(--beige-suave);
+      transition: var(--transicion);
+    }
+    .input-precio:focus { border-color: var(--verde); outline: none; background: var(--blanco); }
+
+    /* TOGGLE */
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #ccc;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider { background: var(--verde); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+    /* PANEL VISIBILITY */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* CONFIG */
+    .config-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid rgba(45,158,95,0.06);
+    }
+    .config-item:last-child { border-bottom: none; }
+    .config-label { font-weight: 600; font-size: 0.88rem; }
+    .config-desc { font-size: 0.78rem; color: var(--texto-suave); margin-top: 0.15rem; }
+
+    /* LOADING */
+    .loading-msg {
+      text-align: center;
+      padding: 3rem;
+      color: var(--texto-suave);
+      font-size: 0.9rem;
+    }
+
+    /* LOGIN ADMIN */
+    .admin-login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--negro);
+      padding: 2rem;
+    }
+
+    .admin-login-box {
+      background: var(--blanco);
+      border-radius: 20px;
+      padding: 2.5rem;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .admin-login-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+    @media (max-width: 900px) {
+      .admin-sidebar { width: 100%; height: auto; position: static; }
+      .admin-main { margin-left: 0; }
+      .admin-wrapper { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN ADMIN (se muestra si no está logueado como admin) -->
+<div id="admin-login-screen" class="admin-login-wrap" style="display:none">
+  <div class="admin-login-box">
+    <div class="admin-login-icon">🔐</div>
+    <div class="modal-titulo" style="font-size:1.5rem;margin-bottom:0.4rem">Panel Admin</div>
+    <div class="modal-subtitulo">Bacán Petshop</div>
+    <form id="form-admin-login" style="margin-top:1.5rem">
+      <div class="form-grupo">
+        <input class="form-input" type="email" id="admin-email" placeholder="Email admin" required>
+      </div>
+      <div class="form-grupo">
+        <input class="form-input" type="password" id="admin-pass" placeholder="Contraseña" required>
+      </div>
+      <button type="submit" class="btn btn-verde" style="width:100%">Ingresar al panel</button>
+    </form>
+    <div id="admin-error" style="color:var(--rojo);font-size:0.82rem;margin-top:0.75rem;display:none"></div>
+  </div>
+</div>
+
+<!-- PANEL PRINCIPAL -->
+<div id="admin-panel" style="display:none">
+  <div class="admin-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="admin-logo">
+        <div class="admin-logo-text">Bacán<span>.</span></div>
+        <div class="admin-logo-sub">Panel Administrador</div>
+      </div>
+
+      <nav class="admin-nav">
+        <div class="admin-nav-label">Principal</div>
+        <button class="admin-nav-item active" onclick="mostrarPanel('dashboard')">
+          <span class="nav-icon">📊</span> Dashboard
+        </button>
+        <button class="admin-nav-item" onclick="mostrarPanel('usuarios')">
+          <span class="nav-icon">👥</span> Usuarios
+        </button>
+
+        <div class="admin-nav-label">Tienda</div>
+        <button class="admin-nav-item" onclick="mostrarPanel('productos')">
+          <span class="nav-icon">📦</span> Productos & Precios
+        </button>
+        <button class="admin-nav-item" onclick="mostrarPanel('pedidos')">
+          <span class="nav-icon">💬</span> Consultas WhatsApp
+        </button>
+
+        <div class="admin-nav-label">Config</div>
+        <button class="admin-nav-item" onclick="mostrarPanel('config')">
+          <span class="nav-icon">⚙️</span> Configuración
+        </button>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <button onclick="salirAdmin()" class="btn btn-sm" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);width:100%">
+          ← Salir del panel
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main">
+
+      <!-- DASHBOARD -->
+      <div id="panel-dashboard" class="panel active">
+        <div class="admin-header">
+          <div>
+            <div class="admin-titulo">Dashboard 📊</div>
+            <div class="admin-subtitulo">Resumen general de Bacán Petshop</div>
+          </div>
+          <div id="admin-user-info" style="font-size:0.85rem;color:var(--texto-suave)"></div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-icono">👥</div>
+            <div class="stat-card-num" id="stat-usuarios">—</div>
+            <div class="stat-card-label">Usuarios registrados</div>
+            <div class="stat-card-trend">↑ Cargando...</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icono">📦</div>
+            <div class="stat-card-num" id="stat-productos">12</div>
+            <div class="stat-card-label">Productos activos</div>
+            <div class="stat-card-trend" style="color:var(--verde)">✓ Actualizados</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icono">💬</div>
+            <div class="stat-card-num">—</div>
+            <div class="stat-card-label">Consultas este mes</div>
+            <div class="stat-card-trend" style="color:var(--marron)">Via WhatsApp</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icono">🔒</div>
+            <div class="stat-card-num" id="stat-precios">ON</div>
+            <div class="stat-card-label">Precios visibles</div>
+            <div class="stat-card-trend">Solo usuarios registrados</div>
+          </div>
+        </div>
+
+        <div class="admin-section">
+          <div class="admin-section-header">
+            <div class="admin-section-titulo">Últimos usuarios registrados</div>
+          </div>
+          <div id="tabla-usuarios-dash">
+            <div class="loading-msg">Cargando usuarios...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- USUARIOS -->
+      <div id="panel-usuarios" class="panel">
+        <div class="admin-header">
+          <div>
+            <div class="admin-titulo">Usuarios 👥</div>
+            <div class="admin-subtitulo">Todos los registrados en Bacán</div>
+          </div>
+          <button onclick="cargarUsuarios()" class="btn btn-outline-verde btn-sm">↻ Actualizar</button>
+        </div>
+        <div class="admin-section">
+          <div class="admin-section-header">
+            <div class="admin-section-titulo">Lista de usuarios</div>
+            <span id="usuarios-count" class="badge badge-verde">—</span>
+          </div>
+          <div id="tabla-usuarios-full">
+            <div class="loading-msg">Cargando...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTOS -->
+      <div id="panel-productos" class="panel">
+        <div class="admin-header">
+          <div>
+            <div class="admin-titulo">Productos & Precios 📦</div>
+            <div class="admin-subtitulo">Editá precios directamente desde acá</div>
+          </div>
+          <button onclick="guardarPrecios()" class="btn btn-verde btn-sm">💾 Guardar cambios</button>
+        </div>
+        <div class="admin-section">
+          <div class="admin-section-header">
+            <div class="admin-section-titulo">Catálogo de productos</div>
+            <span class="badge badge-verde">12 productos</span>
+          </div>
+          <div class="productos-editor" id="productos-editor">
+            <!-- Generado por JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- PEDIDOS / CONSULTAS -->
+      <div id="panel-pedidos" class="panel">
+        <div class="admin-header">
+          <div>
+            <div class="admin-titulo">Consultas WhatsApp 💬</div>
+            <div class="admin-subtitulo">Registro de consultas recibidas (manual)</div>
+          </div>
+        </div>
+        <div class="admin-section">
+          <div class="admin-section-header">
+            <div class="admin-section-titulo">Historial de consultas</div>
+            <button onclick="agregarConsulta()" class="btn btn-verde btn-sm">+ Agregar</button>
+          </div>
+          <div id="tabla-pedidos">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Producto consultado</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="pedidos-body">
+                <tr><td colspan="4" style="text-align:center;padding:2rem;color:var(--texto-suave)">Cargando consultas de Supabase...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONFIG -->
+      <div id="panel-config" class="panel">
+        <div class="admin-header">
+          <div>
+            <div class="admin-titulo">Configuración ⚙️</div>
+            <div class="admin-subtitulo">Ajustes generales de la tienda</div>
+          </div>
+        </div>
+        <div class="admin-section">
+          <div class="admin-section-header">
+            <div class="admin-section-titulo">Visibilidad de precios</div>
+          </div>
+          <div class="config-item">
+            <div>
+              <div class="config-label">Precios visibles solo para registrados</div>
+              <div class="config-desc">Si está activo, los usuarios sin cuenta ven 🔒 en lugar del precio.</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-precios" checked onchange="togglePrecios(this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="config-item">
+            <div>
+              <div class="config-label">Popup de bienvenida activo</div>
+              <div class="config-desc">Muestra el popup al entrar al sitio (una vez por sesión).</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-popup" checked onchange="togglePopup(this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="config-item">
+            <div>
+              <div class="config-label">Número de WhatsApp</div>
+              <div class="config-desc">Usado en todos los botones "Pedir".</div>
+            </div>
+            <input class="input-precio" type="text" value="5493413000000" style="width:200px" id="wpp-numero">
+          </div>
+          <div class="config-item">
+            <div></div>
+            <button onclick="guardarConfig()" class="btn btn-verde btn-sm">Guardar configuración</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
+<script>
+// ============ PRODUCTOS DATA (editable) ============
+const productosData = [
+  { id:1, emoji:'🦴', nombre:'Royal Canin Adult 15kg', cat:'Alimento Perro', precio:18500, activo:true },
+  { id:2, emoji:'🐕', nombre:'Royal Canin Adult 3kg', cat:'Alimento Perro', precio:5200, activo:true },
+  { id:3, emoji:'🐶', nombre:'Purina Pro Plan Puppy', cat:'Alimento Perro', precio:7800, activo:true },
+  { id:4, emoji:'🐱', nombre:'Whiskas Adulto 3kg', cat:'Alimento Gato', precio:4200, activo:true },
+  { id:5, emoji:'🐈', nombre:'Royal Canin Gato Indoor', cat:'Alimento Gato', precio:6900, activo:true },
+  { id:6, emoji:'🍖', nombre:'Bifinho Natural 500g', cat:'Snacks Perro', precio:1800, activo:true },
+  { id:7, emoji:'🎁', nombre:'Temptations Mix 180g', cat:'Snacks Gato', precio:1200, activo:true },
+  { id:8, emoji:'🛁', nombre:'Shampoo Neutro 500ml', cat:'Higiene', precio:2900, activo:true },
+  { id:9, emoji:'✨', nombre:'Desinfectante Amonio 5L', cat:'Higiene Hogar', precio:3500, activo:true },
+  { id:10, emoji:'🎾', nombre:'Juguete mordedor', cat:'Accesorio', precio:1500, activo:true },
+  { id:11, emoji:'🛏️', nombre:'Camita acolchada M', cat:'Accesorio', precio:4800, activo:true },
+  { id:12, emoji:'🏷️', nombre:'Collar con chapa', cat:'Accesorio', precio:2200, activo:true },
+];
+
+// ============ INIT ============
+async function initAdmin() {
+  const session = await getSession();
+  if (!session) {
+    document.getElementById('admin-login-screen').style.display = 'flex';
+    return;
+  }
+
+  // Verificar si es admin (email específico)
+  const ADMIN_EMAILS = ['admin@bacan.com', session.user.email]; // En prod ponés solo el email tuyo
+  if (!ADMIN_EMAILS.includes(session.user.email)) {
+    document.getElementById('admin-login-screen').style.display = 'flex';
+    return;
+  }
+
+  document.getElementById('admin-panel').style.display = 'block';
+  document.getElementById('admin-user-info').textContent = `Admin: ${session.user.email}`;
+  cargarDashboard();
+  renderProductosEditor();
+}
+
+// ============ LOGIN ADMIN ============
+document.getElementById('form-admin-login').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('admin-email').value;
+  const pass = document.getElementById('admin-pass').value;
+  const errEl = document.getElementById('admin-error');
+
+  const { error } = await db.auth.signInWithPassword({ email, password: pass });
+
+  if (error) {
+    errEl.textContent = 'Credenciales incorrectas.';
+    errEl.style.display = 'block';
+  } else {
+    location.reload();
+  }
+});
+
+// ============ PANEL SWITCHER ============
+function mostrarPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`panel-${id}`).classList.add('active');
+  document.querySelectorAll('.admin-nav-item').forEach(i => i.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  if (id === 'usuarios') cargarUsuarios();
+  if (id === 'pedidos') cargarPedidos();
+}
+
+// ============ DASHBOARD ============
+async function cargarDashboard() {
+  // Contar usuarios
+  const { count } = await db.from('profiles').select('*', { count: 'exact', head: true });
+  document.getElementById('stat-usuarios').textContent = count || 0;
+
+  // Últimos 5 usuarios
+  const { data: usuarios } = await db.from('profiles').select('*').order('created_at', { ascending: false }).limit(5);
+  const container = document.getElementById('tabla-usuarios-dash');
+
+  if (!usuarios || usuarios.length === 0) {
+    container.innerHTML = '<div class="loading-msg">No hay usuarios todavía.</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <table>
+      <thead><tr><th>Nombre</th><th>Email</th><th>Registrado</th><th>Estado</th></tr></thead>
+      <tbody>
+        ${usuarios.map(u => `
+          <tr>
+            <td><strong>${u.nombre || '—'}</strong></td>
+            <td>${u.email || '—'}</td>
+            <td>${u.created_at ? new Date(u.created_at).toLocaleDateString('es-AR') : '—'}</td>
+            <td><span class="badge badge-verde">Activo</span></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+// ============ USUARIOS ============
+async function cargarUsuarios() {
+  const { data, count } = await db.from('profiles').select('*', { count: 'exact' }).order('created_at', { ascending: false });
+  document.getElementById('usuarios-count').textContent = `${count || 0} usuarios`;
+
+  const container = document.getElementById('tabla-usuarios-full');
+  if (!data || data.length === 0) {
+    container.innerHTML = '<div class="loading-msg">No hay usuarios registrados todavía.</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <table>
+      <thead>
+        <tr><th>#</th><th>Nombre</th><th>Email</th><th>Registrado</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        ${data.map((u, i) => `
+          <tr>
+            <td style="color:var(--texto-suave)">${i + 1}</td>
+            <td><strong>${u.nombre || '—'}</strong></td>
+            <td>${u.email}</td>
+            <td>${u.created_at ? new Date(u.created_at).toLocaleDateString('es-AR') : '—'}</td>
+            <td><span class="badge badge-verde">Activo</span></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+// ============ PRODUCTOS EDITOR ============
+function renderProductosEditor() {
+  const container = document.getElementById('productos-editor');
+  container.innerHTML = productosData.map(p => `
+    <div class="producto-row">
+      <div class="producto-emoji">${p.emoji}</div>
+      <div>
+        <div class="producto-nombre-edit">${p.nombre}</div>
+        <div class="producto-cat-edit">${p.cat}</div>
+      </div>
+      <div>
+        <input class="input-precio" type="number" id="precio-${p.id}" value="${p.precio}" placeholder="Precio">
+      </div>
+      <div>
+        <span class="badge badge-verde">Activo</span>
+      </div>
+      <div>
+        <label class="toggle-switch">
+          <input type="checkbox" ${p.activo ? 'checked' : ''} onchange="toggleProducto(${p.id}, this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div>
+        <button onclick="guardarPrecioUnico(${p.id})" class="btn btn-sm btn-verde">Guardar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function guardarPrecioUnico(id) {
+  const precio = document.getElementById(`precio-${id}`).value;
+  // Guardar en Supabase
+  const { error } = await db.from('productos').upsert({ id, precio: parseInt(precio) });
+  showToast(error ? 'Error al guardar' : `Precio actualizado ✓`, error ? 'rojo' : 'verde');
+}
+
+async function guardarPrecios() {
+  const updates = productosData.map(p => ({
+    id: p.id,
+    precio: parseInt(document.getElementById(`precio-${p.id}`)?.value || p.precio)
+  }));
+  const { error } = await db.from('productos').upsert(updates);
+  showToast(error ? 'Error al guardar' : 'Todos los precios guardados ✓', error ? 'rojo' : 'verde');
+}
+
+function toggleProducto(id, activo) {
+  const p = productosData.find(x => x.id === id);
+  if (p) p.activo = activo;
+}
+
+// ============ PEDIDOS ============
+async function cargarPedidos() {
+  const { data } = await db.from('consultas').select('*').order('created_at', { ascending: false });
+  const tbody = document.getElementById('pedidos-body');
+
+  if (!data || data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:2rem;color:var(--texto-suave)">No hay consultas registradas todavía.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = data.map(c => `
+    <tr>
+      <td>${c.cliente || '—'}</td>
+      <td>${c.producto || '—'}</td>
+      <td>${c.created_at ? new Date(c.created_at).toLocaleDateString('es-AR') : '—'}</td>
+      <td><span class="badge badge-${c.estado === 'respondido' ? 'verde' : 'amarillo'}">${c.estado || 'pendiente'}</span></td>
+    </tr>
+  `).join('');
+}
+
+function agregarConsulta() {
+  const cliente = prompt('Nombre del cliente:');
+  const producto = prompt('Producto consultado:');
+  if (!cliente || !producto) return;
+  db.from('consultas').insert({ cliente, producto, estado: 'pendiente', created_at: new Date().toISOString() })
+    .then(({ error }) => {
+      showToast(error ? 'Error' : 'Consulta agregada', error ? 'rojo' : 'verde');
+      cargarPedidos();
+    });
+}
+
+// ============ CONFIG ============
+function togglePrecios(activo) {
+  showToast(`Precios ${activo ? 'solo para registrados' : 'visibles para todos'}`, 'verde');
+}
+
+function togglePopup(activo) {
+  showToast(`Popup ${activo ? 'activado' : 'desactivado'}`, 'verde');
+}
+
+function guardarConfig() {
+  showToast('Configuración guardada ✓', 'verde');
+}
+
+// ============ SALIR ============
+async function salirAdmin() {
+  await db.auth.signOut();
+  window.location.href = '../index.html';
+}
+
+// ============ TOAST (local) ============
+function showToast(msg, tipo = '') {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.className = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.className = `toast ${tipo}`;
+  requestAnimationFrame(() => requestAnimationFrame(() => toast.classList.add('show')));
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// INIT
+initAdmin();
+</script>
+</body>
+</html>
